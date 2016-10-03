@@ -1,3 +1,5 @@
 class Idea < ApplicationRecord
-  enum status: ['swill', 'plausible', 'genius']
+  validates_presence_of :title
+
+  enum quality: ['swill', 'plausible', 'genius']
 end
