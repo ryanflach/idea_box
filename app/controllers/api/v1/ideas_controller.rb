@@ -16,10 +16,15 @@ module Api
         render json: {}, status: 204
       end
 
+      def update
+        @idea = Idea.find_by_id(params[:id])
+        render :show if @idea.update(idea_params)
+      end
+
       private
 
       def idea_params
-        params.permit(:title, :body)
+        params.permit(:title, :body, :quality)
       end
     end
   end
