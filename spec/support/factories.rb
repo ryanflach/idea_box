@@ -1,3 +1,6 @@
 FactoryGirl.define do
-  # Add individual factories here - https://github.com/thoughtbot/factory_girl
+  factory :idea do
+    title "Idea!"
+    body Faker::Hacker.say_something_smart
+  end
 end
