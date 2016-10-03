@@ -2,10 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'Request ideas', type: :request do
   it 'gets all ideas' do
-    create_list(:idea, 2)
+    first_idea = create(:idea, title: 'Great idea!')
+    second_idea = create(:idea)
 
     expect(Idea.count).to eq(2)
-    expect(Idea.first.title).to eq('Idea #1')
+    expect(Idea.first.title).to eq('Great idea!')
+    expect(Idea.second.title).to eq('Idea!')
 
     get '/api/v1/ideas'
 
@@ -20,6 +22,7 @@ RSpec.describe 'Request ideas', type: :request do
     expect(ideas.first).to_not have_key('id')
     expect(ideas.first).to_not have_key('created_at')
     expect(ideas.first).to_not have_key('updated_at')
-    expect(ideas.first['title']).to eq('Idea #1')
+    expect(ideas.first['title']).to eq('Great idea!')
+    expect(ideas.second['title']).to eq('Idea!')
   end
 end
