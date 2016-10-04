@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Request update idea' do
   context 'via put request' do
     it 'updates an existing idea' do
-      idea = create(:idea)
+      idea = Idea.create!(title: 'Idea!', body: 'hello')
 
       expect(Idea.count).to eq(1)
       expect(Idea.first.title).to eq('Idea!')
@@ -23,7 +23,7 @@ RSpec.describe 'Request update idea' do
       expect(Idea.first.title).to eq(updated_idea['title'])
       expect(Idea.first.body).to eq(updated_idea['body'])
       expect(Idea.first.quality).to eq(updated_idea['quality'])
-      expect(updated_idea).to_not have_key('id')
+      expect(updated_idea).to have_key('id')
       expect(updated_idea).to_not have_key('created_at')
       expect(updated_idea).to_not have_key('updated_at')
     end
@@ -31,7 +31,7 @@ RSpec.describe 'Request update idea' do
 
   context 'via patch request' do
     it 'updates an existing idea' do
-      idea = create(:idea)
+      idea = Idea.create!(title: 'Idea!', body: 'hello')
 
       expect(Idea.count).to eq(1)
       expect(Idea.first.title).to eq('Idea!')
@@ -51,7 +51,7 @@ RSpec.describe 'Request update idea' do
       expect(Idea.first.title).to eq(updated_idea['title'])
       expect(Idea.first.body).to eq(updated_idea['body'])
       expect(Idea.first.quality).to eq(updated_idea['quality'])
-      expect(updated_idea).to_not have_key('id')
+      expect(updated_idea).to have_key('id')
       expect(updated_idea).to_not have_key('created_at')
       expect(updated_idea).to_not have_key('updated_at')
     end

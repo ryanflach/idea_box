@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Request ideas', type: :request do
-  it 'gets all ideas' do
-    first_idea = create(:idea, title: 'Great idea!')
-    second_idea = create(:idea)
+  it 'gets all ideas sorted by newest' do
+    first_idea = Idea.create!(title: 'Great idea!', body: 'hello')
+    second_idea = Idea.create!(title: 'Idea!', body: 'hello')
 
     expect(Idea.count).to eq(2)
     expect(Idea.first.title).to eq('Great idea!')
@@ -19,10 +19,10 @@ RSpec.describe 'Request ideas', type: :request do
     expect(ideas.first).to have_key('title')
     expect(ideas.first).to have_key('body')
     expect(ideas.first).to have_key('quality')
-    expect(ideas.first).to_not have_key('id')
+    expect(ideas.first).to have_key('id')
     expect(ideas.first).to_not have_key('created_at')
     expect(ideas.first).to_not have_key('updated_at')
-    expect(ideas.first['title']).to eq('Great idea!')
-    expect(ideas.second['title']).to eq('Idea!')
+    expect(ideas.first['title']).to eq('Idea!')
+    expect(ideas.second['title']).to eq('Great idea!')
   end
 end
