@@ -3,14 +3,12 @@ require 'rails_helper'
 RSpec.describe 'Create an idea' do
   scenario 'user adds the only idea', js: true do
     expect(Idea.count).to eq(0)
-    
+
     visit '/'
 
-    within('div .ideas') do
-      expect(page).to_not have_content('Hello')
-      expect(page).to_not have_content('Howdy')
-      expect(page).to_not have_css('#idea-1')
-    end
+    expect(page).to_not have_content('Hello')
+    expect(page).to_not have_content('Howdy')
+    expect(page).to_not have_css('#idea-1')
 
     fill_in 'idea-title', with: 'Hello'
     fill_in 'idea-body', with: 'Howdy'

@@ -4,9 +4,9 @@ RSpec.describe Idea, type: :model do
   it { should validate_presence_of(:title) }
   it { should have_db_column(:body) }
   it { should have_db_column(:quality).with_options(default: :swill) }
-  it do
+  it {
     should define_enum_for(:quality).with([:swill, :plausible, :genius])
-  end
+  }
 
   it 'can return ideas by descending created_at date' do
     old_idea = Idea.create!(title: 'old idea', body: 'hello')
