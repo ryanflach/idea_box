@@ -6,6 +6,19 @@
   =require twitter-bootstrap-static/fontawesome
   */
 
+body {
+  background-attachment: fixed;
+  background-image: url("https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?dpr=1&auto=format&crop=entropy&fit=crop&w=1199&h=899&q=80&cs=tinysrgb");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 @media screen {
   .page-content:after {
     content: '';

@@ -1,7 +1,23 @@
 $(document).ready(function(){
   fetchIdeas();
   createIdeaButton();
+  $('#ideas').on('click', 'input', function(event){
+    deleteIdea(event.target.id);
+  });
 });
+
+var removeIdeaHTML = function(id) {
+  $('#idea-' + id).remove();
+};
+
+var deleteIdea = function(id) {
+  $.ajax({
+    url: '/api/v1/ideas/' + id,
+    type: 'delete',
+    data: id
+  }).then(removeIdeaHTML(id))
+  .fail(handleError);
+};
 
 var createIdeaButton = function(){
   $('#create-idea').on('click', createIdea);
@@ -51,6 +67,9 @@ var createIdeaHTML = function(idea) {
     + "<h6>"
     + idea.quality
     + "</h6>"
+    + "<input class='btn btn-danger' id='"
+    + idea.id
+    + "' type='button' name='delete' value='Delete'>"
     + "</div>"
   );
 };
