@@ -1,3 +1,4 @@
-json.array! @ideas, :title,
+json.array! @ideas, :id,
+                    :title,
                     :body,
                     :quality

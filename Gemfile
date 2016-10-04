@@ -36,14 +36,13 @@ group :test do
   gem 'launchy'
   gem 'shoulda-matchers'
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
   gem 'simplecov', require: false
 end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem 'faker'
+  gem 'selenium-webdriver'
 end
 
 group :development do

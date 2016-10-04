@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Request destroy idea' do
   it 'destroys an idea' do
-    idea = create(:idea)
+    idea = Idea.create!(title: 'hello', body: 'test')
 
     expect(Idea.count).to eq(1)
 

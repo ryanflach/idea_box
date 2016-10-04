@@ -1,1 +1,1 @@
-json.(@idea, :title, :body, :quality)
+json.(@idea, :id, :title, :body, :quality)
