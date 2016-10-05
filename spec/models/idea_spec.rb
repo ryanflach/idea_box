@@ -9,8 +9,10 @@ RSpec.describe Idea, type: :model do
   }
 
   it 'can return ideas by descending created_at date' do
-    old_idea = Idea.create!(title: 'old idea', body: 'hello')
-    new_idea = Idea.create!(title: 'new idea', body: 'hello')
+    old_idea = create(:idea)
+    new_idea = create(:idea)
+
+    expect(old_idea.title).to eq("Idea #1")
 
     expect(Idea.all_by_newest).to eq([new_idea, old_idea])
   end
