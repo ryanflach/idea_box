@@ -90,7 +90,9 @@ var createIdea = function(){
 
 var renderIdea = function(ideaData) {
   $('#ideas').prepend(ideaData);
-}
+  canUpdateIdeaTitle();
+  canUpdateIdeaBody();
+};
 
 var handleError = function(error) { console.log(error) };
 
@@ -192,7 +194,7 @@ var canUpdateIdeaBody = function(){
         this.blur();
       }
     });
-    
+
     $(event.target).on('blur', function(){
       var id = event.target.parentElement.id.split('-')[1];
       var bodyUpdateData = event.target.textContent;
