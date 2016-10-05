@@ -6,7 +6,7 @@ $(document).ready(function(){
   });
   $('#ideas').on('click', 'button', function(event){
     updateIdea(event.target)
-  })
+  });
 });
 
 var reRenderIdea = function(ideaHTML) {
@@ -26,7 +26,7 @@ var processUpdate = function(id, updateData) {
 
 var qualityUpdate = function(type, id, currentQuality) {
   var newQuality;
-  
+
   if (type === 'up') {
     if (currentQuality === 'swill') {
       newQuality = 'plausible'
@@ -48,10 +48,8 @@ var updateIdea = function(targetData) {
   var idData = targetData.id.split('-');
   var buttonType = idData[0];
   var id = idData[1];
-  var currentQuality = $('#idea-' + id).children('.quality').text();
-  if (buttonType !== 'submit') {
-    qualityUpdate(buttonType, id, currentQuality);
-  }
+  var currentQuality = $('#idea-' + id).find('.quality').text();
+  qualityUpdate(buttonType, id, currentQuality);
 };
 
 var removeIdeaHTML = function(id) {
@@ -96,8 +94,18 @@ var renderIdea = function(ideaData) {
 
 var handleError = function(error) { console.log(error) };
 
-var limit100Words = function(text) {
-  return text.split(' ').splice(0, 100).join(' ');
+var limit100Chars = function(text) {
+  var words = text.split(' ');
+  var newString = "";
+  var counter = 0;
+  words.forEach(function(word){
+    var wordSize = word.length;
+    if (counter + wordSize <= 100) {
+      counter += wordSize;
+      newString = newString + word + " ";
+    }
+  });
+  return newString;
 };
 
 var createThumbsButton = function(type, idea) {
@@ -132,11 +140,11 @@ var createIdeaHTML = function(idea) {
     "<div class='idea well' id='idea-"
     + idea.id
     + "'>"
-    + "<h3>"
+    + "<h3 contenteditable='true' id='title'>"
     + idea.title
     + "</h3>"
-    + "<p>"
-    + limit100Words(idea.body)
+    + "<p contenteditable='true' id='body'>"
+    + limit100Chars(idea.body)
     + "</p>"
     + "<h6 class='quality'>"
     + idea.quality
@@ -154,8 +162,53 @@ var collectIdeas = function(ideaData) {
   return ideaData.map(createIdeaHTML);
 };
 
+var canUpdateIdeaTitle = function(){
+  $('#title').on('focus', function(event){
+    $(event.target).on('keydown', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        this.blur();
+      }
+    });
+
+    $(event.target).on('blur', function(){
+      var id = event.target.parentElement.id.split('-')[1];
+      var titleUpdateData = event.target.textContent;
+      $.ajax({
+        url: '/api/v1/ideas/' + id,
+        type: 'put',
+        data: { title: titleUpdateData }
+      }).fail(handleError);
+    });
+
+  });
+};
+
+var canUpdateIdeaBody = function(){
+  $('#body').on('focus', function(event){
+    $(event.target).on('keydown', function(e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        this.blur();
+      }
+    });
+    
+    $(event.target).on('blur', function(){
+      var id = event.target.parentElement.id.split('-')[1];
+      var bodyUpdateData = event.target.textContent;
+      $.ajax({
+        url: '/api/v1/ideas/' + id,
+        type: 'put',
+        data: { body: bodyUpdateData }
+      }).fail(handleError);
+    });
+  });
+};
+
 var renderIdeas = function(ideaData) {
   $('#ideas').html(ideaData);
+  canUpdateIdeaTitle();
+  canUpdateIdeaBody();
 };
 
 var fetchIdeas = function(){
