@@ -37,12 +37,13 @@ group :test do
   gem 'shoulda-matchers'
   gem 'database_cleaner'
   gem 'simplecov', require: false
+  gem 'selenium-webdriver'
+  gem 'factory_girl_rails'
 end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem 'selenium-webdriver'
 end
 
 group :development do
