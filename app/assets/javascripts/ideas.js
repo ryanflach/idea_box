@@ -7,7 +7,16 @@ $(document).ready(function(){
   $('#ideas').on('click', 'button', function(event){
     updateIdea(event.target)
   });
+  searchBarPresent();
 });
+
+var searchBarPresent = function(){
+  if ($('#ideas').children().length) {
+    $('#idea-search-box').show();
+  } else {
+    $('#idea-search-box').hide();
+  }
+}
 
 var reRenderIdea = function(ideaHTML) {
   var id = this.url.split('/').splice(4, 5).join('')
@@ -64,6 +73,8 @@ var deleteIdea = function(id) {
     type: 'delete'
   }).then(removeIdeaHTML(id))
   .fail(handleError);
+
+  searchBarPresent();
 };
 
 var createIdeaButton = function(){
@@ -94,6 +105,7 @@ var renderIdea = function(ideaData) {
   $('#ideas').prepend(ideaData);
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
+  searchBarPresent();
 };
 
 var handleError = function(error) { console.log(error) };
@@ -213,6 +225,7 @@ var renderIdeas = function(ideaData) {
   $('#ideas').html(ideaData);
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
+  searchBarPresent();
 };
 
 var fetchIdeas = function(){
