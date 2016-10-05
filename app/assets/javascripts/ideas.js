@@ -12,6 +12,8 @@ $(document).ready(function(){
 var reRenderIdea = function(ideaHTML) {
   var id = this.url.split('/').splice(4, 5).join('')
   $('#idea-' + id).replaceWith(ideaHTML)
+  canUpdateIdeaTitle();
+  canUpdateIdeaBody();
 }
 
 var processUpdate = function(id, updateData) {
