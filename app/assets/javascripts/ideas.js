@@ -7,7 +7,7 @@ $(document).ready(function(){
   $('#ideas').on('click', 'button', function(event){
     updateIdea(event.target)
   });
-  searchBarPresent();
+  $('.ideas').bind('DOMNodeInserted', searchBar);
 });
 
 var searchBar = function(){
