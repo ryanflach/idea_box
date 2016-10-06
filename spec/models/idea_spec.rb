@@ -12,8 +12,6 @@ RSpec.describe Idea, type: :model do
     old_idea = create(:idea)
     new_idea = create(:idea)
 
-    expect(old_idea.title).to eq("Idea #1")
-
     expect(Idea.all_by_newest).to eq([new_idea, old_idea])
   end
 end

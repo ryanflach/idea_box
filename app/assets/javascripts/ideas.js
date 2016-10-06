@@ -7,13 +7,40 @@ $(document).ready(function(){
   $('#ideas').on('click', 'button', function(event){
     updateIdea(event.target)
   });
+  searchBarPresent();
 });
+
+var searchBar = function(){
+  var $ideas = $('.idea');
+
+  $('#search-box').on('keyup', function(){
+    var currentEntry = this.value;
+
+    $ideas.each(function(index, idea){
+      $idea = $(idea);
+      if ($idea.data('all').toLowerCase().indexOf(currentEntry.toLowerCase()) !== -1){
+        $idea.show();
+      } else {
+        $idea.hide();
+      }
+    })
+  });
+};
+
+var searchBarPresent = function(){
+  if ($('#ideas').children().length) {
+    $('#idea-search-box').show();
+  } else {
+    $('#idea-search-box').hide();
+  }
+}
 
 var reRenderIdea = function(ideaHTML) {
   var id = this.url.split('/').splice(4, 5).join('')
   $('#idea-' + id).replaceWith(ideaHTML)
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
+  searchBar();
 }
 
 var processUpdate = function(id, updateData) {
@@ -64,6 +91,8 @@ var deleteIdea = function(id) {
     type: 'delete'
   }).then(removeIdeaHTML(id))
   .fail(handleError);
+
+  searchBarPresent();
 };
 
 var createIdeaButton = function(){
@@ -94,6 +123,8 @@ var renderIdea = function(ideaData) {
   $('#ideas').prepend(ideaData);
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
+  searchBarPresent();
+  searchBar();
 };
 
 var handleError = function(error) { console.log(error) };
@@ -109,7 +140,7 @@ var limit100Chars = function(text) {
       newString = newString + word + " ";
     }
   });
-  return newString;
+  return newString.trim();
 };
 
 var createThumbsButton = function(type, idea) {
@@ -143,6 +174,10 @@ var createIdeaHTML = function(idea) {
   return(
     "<div class='idea well' id='idea-"
     + idea.id
+    + "' data-id='"
+    + idea.id
+    + "' data-all='"
+    + idea.title + " " + limit100Chars(idea.body)
     + "'>"
     + "<h3 contenteditable='true' id='title'>"
     + idea.title
@@ -213,6 +248,8 @@ var renderIdeas = function(ideaData) {
   $('#ideas').html(ideaData);
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
+  searchBarPresent();
+  searchBar();
 };
 
 var fetchIdeas = function(){
