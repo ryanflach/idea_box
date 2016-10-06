@@ -20,7 +20,7 @@ RSpec.describe 'Search for an idea' do
       expect(page).to have_css('#idea-search-box', visible: true)
     end
 
-    scenario 'user filters ideas by searching', js: true do
+    scenario 'user filters existing ideas by searching', js: true do
       unique_idea = create(:idea, title: 'Unique', body: 'example text')
       generic_idea =
         create(:idea, title: 'Generic', body: 'example text')
@@ -48,6 +48,35 @@ RSpec.describe 'Search for an idea' do
         expect(page).to have_content('Unique')
         expect(page).to have_content('Generic')
         expect(page).to have_content('example text')
+      end
+    end
+
+    scenario 'user filters new ideas by searching', js: true do
+      visit '/'
+
+      fill_in 'idea-title', with: 'Hello'
+      fill_in 'idea-body', with: 'Great idea'
+      click_on 'Create Idea'
+
+      fill_in 'search-box', with: 'hello'
+
+      within('div #ideas') do
+        expect(page).to have_content('Hello')
+        expect(page).to have_content('Great idea')
+      end
+
+      fill_in 'search-box', with: 'not present'
+
+      within('div #ideas') do
+        expect(page).to_not have_content('Hello')
+        expect(page).to_not have_content('Great idea')
+      end
+
+      fill_in 'search-box', with: 'great'
+
+      within('div #ideas') do
+        expect(page).to have_content('Hello')
+        expect(page).to have_content('Great idea')
       end
     end
   end

@@ -1,14 +1,26 @@
 $(document).ready(function(){
   fetchIdeas();
   createIdeaButton();
-  $('#ideas').on('click', 'input', function(event){
-    deleteIdea(event.target.id);
-  });
+  watchForDelete();
+  watchForUpdate();
+  watchForNew();
+});
+
+var watchForNew = function(){
+  $('.ideas').bind('DOMNodeInserted', searchBar);
+};
+
+var watchForUpdate = function(){
   $('#ideas').on('click', 'button', function(event){
     updateIdea(event.target)
   });
-  searchBarPresent();
-});
+};
+
+var watchForDelete = function(){
+  $('#ideas').on('click', 'input', function(event){
+    deleteIdea(event.target.id);
+  });
+};
 
 var searchBar = function(){
   var $ideas = $('.idea');
@@ -33,7 +45,7 @@ var searchBarPresent = function(){
   } else {
     $('#idea-search-box').hide();
   }
-}
+};
 
 var reRenderIdea = function(ideaHTML) {
   var id = this.url.split('/').splice(4, 5).join('')
@@ -41,7 +53,7 @@ var reRenderIdea = function(ideaHTML) {
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
   searchBar();
-}
+};
 
 var processUpdate = function(id, updateData) {
   $.ajax({
@@ -121,6 +133,10 @@ var createIdea = function(){
 
 var renderIdea = function(ideaData) {
   $('#ideas').prepend(ideaData);
+  ensureUpdateAndSearch();
+};
+
+var ensureUpdateAndSearch = function(){
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
   searchBarPresent();
@@ -188,7 +204,7 @@ var createIdeaHTML = function(idea) {
     + "<h6 class='quality'>"
     + idea.quality
     + "</h6>"
-    + "<input class='btn btn-danger' id='"
+    + "<input class='btn btn-danger btn-xs' id='"
     + idea.id
     + "' type='button' name='delete' value='Delete'>"
     + createThumbsButton('Thumbs Down', idea)
@@ -246,10 +262,7 @@ var canUpdateIdeaBody = function(){
 
 var renderIdeas = function(ideaData) {
   $('#ideas').html(ideaData);
-  canUpdateIdeaTitle();
-  canUpdateIdeaBody();
-  searchBarPresent();
-  searchBar();
+  ensureUpdateAndSearch();
 };
 
 var fetchIdeas = function(){
