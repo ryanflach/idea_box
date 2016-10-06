@@ -36,7 +36,7 @@ var searchBarPresent = function(){
 }
 
 var reRenderIdea = function(ideaHTML) {
-  var id = JSON.parse(event.target.response).id
+  var id = this.url.split('/').splice(4, 5).join('')
   $('#idea-' + id).replaceWith(ideaHTML)
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
