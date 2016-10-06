@@ -10,6 +10,23 @@ $(document).ready(function(){
   searchBarPresent();
 });
 
+var searchBar = function(){
+  var $ideas = $('.idea');
+
+  $('#search-box').on('keyup', function(){
+    var currentEntry = this.value;
+
+    $ideas.each(function(index, idea){
+      $idea = $(idea);
+      if ($idea.data('all').toLowerCase().indexOf(currentEntry.toLowerCase()) !== -1){
+        $idea.show();
+      } else {
+        $idea.hide();
+      }
+    })
+  });
+};
+
 var searchBarPresent = function(){
   if ($('#ideas').children().length) {
     $('#idea-search-box').show();
@@ -19,10 +36,11 @@ var searchBarPresent = function(){
 }
 
 var reRenderIdea = function(ideaHTML) {
-  var id = this.url.split('/').splice(4, 5).join('')
+  var id = JSON.parse(event.target.response).id
   $('#idea-' + id).replaceWith(ideaHTML)
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
+  searchBar();
 }
 
 var processUpdate = function(id, updateData) {
@@ -106,6 +124,7 @@ var renderIdea = function(ideaData) {
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
   searchBarPresent();
+  searchBar();
 };
 
 var handleError = function(error) { console.log(error) };
@@ -121,7 +140,7 @@ var limit100Chars = function(text) {
       newString = newString + word + " ";
     }
   });
-  return newString;
+  return newString.trim();
 };
 
 var createThumbsButton = function(type, idea) {
@@ -155,6 +174,10 @@ var createIdeaHTML = function(idea) {
   return(
     "<div class='idea well' id='idea-"
     + idea.id
+    + "' data-id='"
+    + idea.id
+    + "' data-all='"
+    + idea.title + " " + limit100Chars(idea.body)
     + "'>"
     + "<h3 contenteditable='true' id='title'>"
     + idea.title
@@ -226,6 +249,7 @@ var renderIdeas = function(ideaData) {
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
   searchBarPresent();
+  searchBar();
 };
 
 var fetchIdeas = function(){
