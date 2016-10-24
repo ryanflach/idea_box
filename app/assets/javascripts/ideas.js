@@ -12,7 +12,7 @@ const watchForNew = () => {
 
 const watchForUpdate = () => {
   $('#ideas').on('click', 'button', (event) => {
-    updateIdea(event.target)
+    updateIdea(event.target);
   });
 };
 
@@ -35,17 +35,18 @@ const searchBar = () => {
       } else {
         $idea.hide();
       }
-    })
+    });
   });
 };
 
 const searchBarPresent = () => {
-  $('#ideas').children().length ? $('#idea-search-box').show() : $('#idea-search-box').hide();
+  const $box = $('#idea-search-box');
+  $('#ideas').children().length ? $box.show() : $box.hide();
 };
 
 const reRenderIdea = function(ideaHTML) {
-  const id = this.url.split('/').splice(4, 5).join('')
-  $('#idea-' + id).replaceWith(ideaHTML)
+  const id = this.url.split('/').splice(4, 5).join('');
+  $('#idea-' + id).replaceWith(ideaHTML);
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
   searchBar();
@@ -66,15 +67,15 @@ const qualityUpdate = (type, id, currentQuality) => {
 
   if (type === 'up') {
     if (currentQuality === 'swill') {
-      newQuality = 'plausible'
+      newQuality = 'plausible';
     } else if (currentQuality === 'plausible') {
-      newQuality = 'genius'
+      newQuality = 'genius';
     }
   } else {
     if (currentQuality === 'genius') {
-      newQuality = 'plausible'
+      newQuality = 'plausible';
     } else if (currentQuality === 'plausible') {
-      newQuality = 'swill'
+      newQuality = 'swill';
     }
   }
 
@@ -110,7 +111,7 @@ const createIdeaButton = () => {
 const clearInputs = () => {
   $('#idea-title').val('');
   $('#idea-body').val('');
-}
+};
 
 const createIdea = () => {
   const ideaParams = {
@@ -160,52 +161,52 @@ const createThumbsButton = (type, idea) => {
   let id;
 
   if ((idea.quality === 'genius' && type === 'Thumbs Up') || (idea.quality === 'swill' && type === 'Thumbs Down')) {
-    disabledStatus = "disabled='true'"
+    disabledStatus = "disabled='true'";
   } else {
-    disabledStatus = ''
+    disabledStatus = '';
   }
 
   if (type === 'Thumbs Up') {
-    id = 'up-' + idea.id
+    id = 'up-' + idea.id;
   } else {
-    id = 'down-' + idea.id
+    id = 'down-' + idea.id;
   }
 
   return (
-    "<button type='button' class='btn btn-success btn-xs' id='"
-    + id
-    + "'"
-    + disabledStatus
-    + "'>"
-    + type
-    +"</button>"
+    "<button type='button' class='btn btn-success btn-xs' id='" +
+    id +
+    "'" +
+    disabledStatus +
+    "'>" +
+    type +
+    "</button>"
   );
 };
 
 const createIdeaHTML = (idea) => {
   return(
-    "<div class='idea well' id='idea-"
-    + idea.id
-    + "' data-id='"
-    + idea.id
-    + "' data-all='"
-    + idea.title + " " + limit100Chars(idea.body)
-    + "'>"
-    + "<h3 contenteditable='true' id='title'>"
-    + idea.title
-    + "</h3>"
-    + "<p contenteditable='true' id='body'>"
-    + limit100Chars(idea.body)
-    + "</p>"
-    + "<h6 class='quality'>"
-    + idea.quality
-    + "</h6>"
-    + "<input class='btn btn-danger btn-xs' id='"
-    + idea.id
-    + "' type='button' name='delete' value='Delete'>"
-    + createThumbsButton('Thumbs Down', idea)
-    + createThumbsButton('Thumbs Up', idea)
-    + "</div>"
+    "<div class='idea well' id='idea-" +
+    idea.id +
+    "' data-id='" +
+    idea.id +
+    "' data-all='" +
+    idea.title + " " + limit100Chars(idea.body) +
+    "'>" +
+    "<h3 contenteditable='true' id='title'>" +
+    idea.title +
+    "</h3>" +
+    "<p contenteditable='true' id='body'>" +
+    limit100Chars(idea.body) +
+    "</p>" +
+    "<h6 class='quality'>" +
+    idea.quality +
+    "</h6>" +
+    "<input class='btn btn-danger btn-xs' id='" +
+    idea.id +
+    "' type='button' name='delete' value='Delete'>" +
+    createThumbsButton('Thumbs Down', idea) +
+    createThumbsButton('Thumbs Up', idea) +
+    "</div>"
   );
 };
 
