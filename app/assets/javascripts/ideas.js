@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(() => {
   fetchIdeas();
   createIdeaButton();
   watchForDelete();
@@ -6,30 +6,30 @@ $(document).ready(function(){
   watchForNew();
 });
 
-var watchForNew = function(){
+const watchForNew = () => {
   $('.ideas').bind('DOMNodeInserted', searchBar);
 };
 
-var watchForUpdate = function(){
-  $('#ideas').on('click', 'button', function(event){
+const watchForUpdate = () => {
+  $('#ideas').on('click', 'button', (event) => {
     updateIdea(event.target)
   });
 };
 
-var watchForDelete = function(){
-  $('#ideas').on('click', 'input', function(event){
+const watchForDelete = () => {
+  $('#ideas').on('click', 'input', (event) => {
     deleteIdea(event.target.id);
   });
 };
 
-var searchBar = function(){
-  var $ideas = $('.idea');
+const searchBar = () => {
+  const $ideas = $('.idea');
 
-  $('#search-box').on('keyup', function(){
-    var currentEntry = this.value;
+  $('#search-box').on('keyup', function() {
+    const currentEntry = this.value;
 
-    $ideas.each(function(index, idea){
-      $idea = $(idea);
+    $ideas.each((index, idea) => {
+      let $idea = $(idea);
       if ($idea.data('all').toLowerCase().indexOf(currentEntry.toLowerCase()) !== -1){
         $idea.show();
       } else {
@@ -39,23 +39,19 @@ var searchBar = function(){
   });
 };
 
-var searchBarPresent = function(){
-  if ($('#ideas').children().length) {
-    $('#idea-search-box').show();
-  } else {
-    $('#idea-search-box').hide();
-  }
+const searchBarPresent = () => {
+  $('#ideas').children().length ? $('#idea-search-box').show() : $('#idea-search-box').hide();
 };
 
-var reRenderIdea = function(ideaHTML) {
-  var id = this.url.split('/').splice(4, 5).join('')
+const reRenderIdea = function(ideaHTML) {
+  const id = this.url.split('/').splice(4, 5).join('')
   $('#idea-' + id).replaceWith(ideaHTML)
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
   searchBar();
 };
 
-var processUpdate = function(id, updateData) {
+const processUpdate = (id, updateData) => {
   $.ajax({
     url: '/api/v1/ideas/' + id,
     method: 'put',
@@ -65,8 +61,8 @@ var processUpdate = function(id, updateData) {
   .fail(handleError);
 };
 
-var qualityUpdate = function(type, id, currentQuality) {
-  var newQuality;
+const qualityUpdate = (type, id, currentQuality) => {
+  let newQuality;
 
   if (type === 'up') {
     if (currentQuality === 'swill') {
@@ -85,19 +81,19 @@ var qualityUpdate = function(type, id, currentQuality) {
   processUpdate(id, { quality: newQuality });
 };
 
-var updateIdea = function(targetData) {
-  var idData = targetData.id.split('-');
-  var buttonType = idData[0];
-  var id = idData[1];
-  var currentQuality = $('#idea-' + id).find('.quality').text();
+const updateIdea = (targetData) => {
+  const idData = targetData.id.split('-');
+  const buttonType = idData[0];
+  const id = idData[1];
+  const currentQuality = $('#idea-' + id).find('.quality').text();
   qualityUpdate(buttonType, id, currentQuality);
 };
 
-var removeIdeaHTML = function(id) {
+const removeIdeaHTML = (id) => {
   $('#idea-' + id).remove();
 };
 
-var deleteIdea = function(id) {
+const deleteIdea = (id) => {
   $.ajax({
     url: '/api/v1/ideas/' + id,
     type: 'delete'
@@ -107,17 +103,17 @@ var deleteIdea = function(id) {
   searchBarPresent();
 };
 
-var createIdeaButton = function(){
+const createIdeaButton = () => {
   $('#create-idea').on('click', createIdea);
 };
 
-var clearInputs = function(){
+const clearInputs = () => {
   $('#idea-title').val('');
   $('#idea-body').val('');
 }
 
-var createIdea = function(){
-  var ideaParams = {
+const createIdea = () => {
+  const ideaParams = {
     title: $('#idea-title').val(),
     body: $('#idea-body').val()
   };
@@ -131,26 +127,26 @@ var createIdea = function(){
   .fail(handleError);
 };
 
-var renderIdea = function(ideaData) {
+const renderIdea = (ideaData) => {
   $('#ideas').prepend(ideaData);
   ensureUpdateAndSearch();
 };
 
-var ensureUpdateAndSearch = function(){
+const ensureUpdateAndSearch = () => {
   canUpdateIdeaTitle();
   canUpdateIdeaBody();
   searchBarPresent();
   searchBar();
 };
 
-var handleError = function(error) { console.log(error) };
+const handleError = (error) => { console.log(error); };
 
-var limit100Chars = function(text) {
-  var words = text.split(' ');
-  var newString = "";
-  var counter = 0;
+const limit100Chars = (text) => {
+  const words = text.split(' ');
+  let newString = "";
+  let counter = 0;
   words.forEach(function(word){
-    var wordSize = word.length;
+    const wordSize = word.length;
     if (counter + wordSize <= 100) {
       counter += wordSize;
       newString = newString + word + " ";
@@ -159,9 +155,9 @@ var limit100Chars = function(text) {
   return newString.trim();
 };
 
-var createThumbsButton = function(type, idea) {
-  var disabledStatus;
-  var id;
+const createThumbsButton = (type, idea) => {
+  let disabledStatus;
+  let id;
 
   if ((idea.quality === 'genius' && type === 'Thumbs Up') || (idea.quality === 'swill' && type === 'Thumbs Down')) {
     disabledStatus = "disabled='true'"
@@ -186,7 +182,7 @@ var createThumbsButton = function(type, idea) {
   );
 };
 
-var createIdeaHTML = function(idea) {
+const createIdeaHTML = (idea) => {
   return(
     "<div class='idea well' id='idea-"
     + idea.id
@@ -213,12 +209,12 @@ var createIdeaHTML = function(idea) {
   );
 };
 
-var collectIdeas = function(ideaData) {
+const collectIdeas = (ideaData) => {
   return ideaData.map(createIdeaHTML);
 };
 
-var canUpdateIdeaTitle = function(){
-  $('#title').on('focus', function(event){
+const canUpdateIdeaTitle = () => {
+  $('#title').on('focus', function(event) {
     $(event.target).on('keydown', function(e) {
       if (e.which === 13) {
         e.preventDefault();
@@ -226,9 +222,9 @@ var canUpdateIdeaTitle = function(){
       }
     });
 
-    $(event.target).on('blur', function(){
-      var id = event.target.parentElement.id.split('-')[1];
-      var titleUpdateData = event.target.textContent;
+    $(event.target).on('blur', () => {
+      const id = event.target.parentElement.id.split('-')[1];
+      const titleUpdateData = event.target.textContent;
       $.ajax({
         url: '/api/v1/ideas/' + id,
         type: 'put',
@@ -239,8 +235,8 @@ var canUpdateIdeaTitle = function(){
   });
 };
 
-var canUpdateIdeaBody = function(){
-  $('#body').on('focus', function(event){
+const canUpdateIdeaBody = () => {
+  $('#body').on('focus', function(event) {
     $(event.target).on('keydown', function(e) {
       if (e.which === 13) {
         e.preventDefault();
@@ -248,9 +244,9 @@ var canUpdateIdeaBody = function(){
       }
     });
 
-    $(event.target).on('blur', function(){
-      var id = event.target.parentElement.id.split('-')[1];
-      var bodyUpdateData = event.target.textContent;
+    $(event.target).on('blur', () => {
+      const id = event.target.parentElement.id.split('-')[1];
+      const bodyUpdateData = event.target.textContent;
       $.ajax({
         url: '/api/v1/ideas/' + id,
         type: 'put',
@@ -260,12 +256,12 @@ var canUpdateIdeaBody = function(){
   });
 };
 
-var renderIdeas = function(ideaData) {
+const renderIdeas = (ideaData) => {
   $('#ideas').html(ideaData);
   ensureUpdateAndSearch();
 };
 
-var fetchIdeas = function(){
+const fetchIdeas = () => {
   $.ajax({
     url: '/api/v1/ideas'
   }).then(collectIdeas)
